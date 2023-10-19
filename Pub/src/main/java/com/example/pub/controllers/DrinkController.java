@@ -20,6 +20,6 @@ public class DrinkController {
 
    @GetMapping("/")
    public ResponseEntity<?> getDrinkMenu() {
-        return null;
+        return ResponseEntity.status(200).body(drinkService.getDrinkMenu());
    }
 }
