@@ -13,14 +13,34 @@ public class Order {
     private String productName;
     private Integer amount;
     private Integer price;
+    private Long userId;
+    public Order() {
+    }
 
-    public Long getiD() {
+    public Order(Long id, String productName,Integer amount, Integer price, Long userId) {
+        this.id = id;
+        this.productName = productName;
+        this.amount = amount;
+        this.price = price;
+        this.userId = userId;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setiD(Long iD) {
-        this.id = iD;
+    public void setId(Long id) {
+        this.id = id;
     }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
 
     public String getProductName() {
         return productName;

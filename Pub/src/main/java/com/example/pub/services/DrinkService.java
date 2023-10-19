@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DrinkService {
@@ -18,5 +19,14 @@ public class DrinkService {
 
     public List<Drink> getDrinkMenu() {
         return (List<Drink>)(drinkRepository.findAll());
+    }
+
+    public Drink getProductById(Long id) {
+        Optional<Drink> drink = drinkRepository.findById(id);
+        if(drink.isPresent()) {
+            return drink.get();
+        } else {
+            throw new RuntimeException("Product not found");
+        }
     }
 }
