@@ -20,21 +20,32 @@ public class OrderService {
         this.drinkService = drinkService;
     }
 
-    public void placeOrder(PlacedOrder placedOrder) {
-        if (isOrderValid(placedOrder)) {
-
+    public Order placeOrder(PlacedOrder placedOrder) {
+        User user = userService.getUserById(placedOrder.getUserId());
+        Drink drink = drinkService.getProductById(placedOrder.getProductId());
+        Integer amount = drink.getPrice()/placedOrder.getPrice();
+        if (isOrderValid(user, drink, placedOrder.getPrice())) {
+            userService.payForOrder(user, placedOrder.getPrice());
+            return createOrder(drink.getProductName(), amount, placedOrder.getPrice(), user.getId());
+        }
+        else {
+            throw new RuntimeException("Order is not valid");
         }
     }
 
-    private boolean isOrderValid(PlacedOrder placedOrder) {
-        User user = userService.getUserById(placedOrder.getUserId());
-        Drink drink = drinkService.getProductById(placedOrder.getProductId());
-        if(placedOrder.getPrice() > user.getPocket()) {
+    private boolean isOrderValid(User user, Drink drink, Integer price) {
+        if(price > user.getPocket()) {
             return false;
         }
         if(drink.isForAdult() == true) {
             return user.isAdult();
         }
         return true;
+    }
+
+    private Order createOrder(String productName,Integer amount, Integer price, Long userId) {
+        Order order = new Order(productName,amount,price,userId);
+        orderRepository.save(order);
+        return order;
     }
 }

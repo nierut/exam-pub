@@ -17,8 +17,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(Long id, String productName,Integer amount, Integer price, Long userId) {
-        this.id = id;
+    public Order(String productName,Integer amount, Integer price, Long userId) {
         this.productName = productName;
         this.amount = amount;
         this.price = price;

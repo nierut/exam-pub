@@ -28,6 +28,9 @@ public class UserService {
         } else {
             throw new RuntimeException("User not found");
         }
+    }
 
+    public void payForOrder(User user, Integer price) {
+        user.pay(price);
     }
 }

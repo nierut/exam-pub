@@ -21,6 +21,10 @@ public class OrderController {
 
     @PostMapping("/buy")
     public ResponseEntity<?> placeOrder(@RequestBody PlacedOrder placedOrder) {
-        return null;
+        try {
+            return ResponseEntity.status(200).body(orderService.placeOrder(placedOrder));
+        } catch (Exception exception) {
+            return ResponseEntity.status(404).body(exception.getMessage());
+        }
     }
 }
