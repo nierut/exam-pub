@@ -20,11 +20,7 @@ public class UserController {
 
     @GetMapping("/")
     public ResponseEntity<?> getUsers() {
-        try {
             return ResponseEntity.status(200).body(userService.getUsers());
-        } catch(Exception exception) {
-            return ResponseEntity.status(404).body(exception.getMessage());
-        }
     }
 
     @GetMapping("/{id}")
