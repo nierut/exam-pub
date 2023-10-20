@@ -2,6 +2,7 @@ package com.example.pub.services;
 
 import com.example.pub.models.DTOs.SummaryAllDTO;
 import com.example.pub.models.DTOs.PlacedOrder;
+import com.example.pub.models.DTOs.SummaryByproductDTO;
 import com.example.pub.models.Drink;
 import com.example.pub.models.Commission;
 import com.example.pub.models.User;
@@ -77,5 +78,21 @@ public class OrderService {
         }
         SummaryAllDTO summaryForOneDrink = new SummaryAllDTO(drink.getProductName(),amountSum, drink.getPrice(),priceSum);
         return summaryForOneDrink;
+    }
+
+
+    public List<SummaryByproductDTO> getCommissionSummaryByProduct(Long productId) {
+        String productName = drinkService.getProductById(productId).getProductName();
+        List<Commission> commissions = orderRepository.getCommissionsByProductName(productName);
+        List<SummaryByproductDTO> summary = new ArrayList<>();
+        for(int i = 0; i < commissions.size();i++) {
+            summary.add(convertCommissionToSummaryByProductDTO(commissions.get(i)));
+        }
+        return summary;
+    }
+
+    private SummaryByproductDTO convertCommissionToSummaryByProductDTO(Commission commission) {
+        Long userId = commission.getUser().getId();
+        return new SummaryByproductDTO(userId, commission);
     }
 }

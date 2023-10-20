@@ -5,10 +5,7 @@ import com.example.pub.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/")
@@ -32,5 +29,14 @@ public class OrderController {
     @GetMapping("/summary/all")
     public ResponseEntity<?> getCompleteCommissionSummary() {
         return ResponseEntity.status(200).body(orderService.getSummaryAllDTOs());
+    }
+
+    @GetMapping("summary/{productId}")
+    public ResponseEntity<?> getCommissionSummaryByProduct(@PathVariable Long productId) {
+        try {
+            return ResponseEntity.status(200).body(orderService.getCommissionSummaryByProduct(productId));
+        } catch (Exception exception) {
+            return ResponseEntity.status(404).body(exception.getMessage());
+        }
     }
 }
