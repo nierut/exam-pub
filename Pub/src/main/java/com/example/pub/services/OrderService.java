@@ -2,7 +2,8 @@ package com.example.pub.services;
 
 import com.example.pub.models.DTOs.SummaryAllDTO;
 import com.example.pub.models.DTOs.PlacedOrder;
-import com.example.pub.models.DTOs.SummaryByproductDTO;
+import com.example.pub.models.DTOs.SummaryByUserDTO;
+import com.example.pub.models.DTOs.SummaryByProductDTO;
 import com.example.pub.models.Drink;
 import com.example.pub.models.Commission;
 import com.example.pub.models.User;
@@ -81,18 +82,32 @@ public class OrderService {
     }
 
 
-    public List<SummaryByproductDTO> getCommissionSummaryByProduct(Long productId) {
+    public List<SummaryByProductDTO> getCommissionSummaryByProduct(Long productId) {
         String productName = drinkService.getProductById(productId).getProductName();
         List<Commission> commissions = orderRepository.getCommissionsByProductName(productName);
-        List<SummaryByproductDTO> summary = new ArrayList<>();
+        List<SummaryByProductDTO> summary = new ArrayList<>();
         for(int i = 0; i < commissions.size();i++) {
             summary.add(convertCommissionToSummaryByProductDTO(commissions.get(i)));
         }
         return summary;
     }
 
-    private SummaryByproductDTO convertCommissionToSummaryByProductDTO(Commission commission) {
+    private SummaryByProductDTO convertCommissionToSummaryByProductDTO(Commission commission) {
         Long userId = commission.getUser().getId();
-        return new SummaryByproductDTO(userId, commission);
+        return new SummaryByProductDTO(userId, commission);
+    }
+
+    public List<SummaryByUserDTO> getCommissionsByUser() {
+        List<Commission> commissions = (List<Commission>)(orderRepository.findAll());
+        List<SummaryByUserDTO> summary = new ArrayList<>();
+        for(int i = 0; i < commissions.size();i++) {
+            summary.add(convertCommissionToSummaryByUserDTO(commissions.get(i)));
+        }
+        return summary;
+    }
+
+    private SummaryByUserDTO convertCommissionToSummaryByUserDTO(Commission commission) {
+        Long userId = commission.getUser().getId();
+        return new SummaryByUserDTO(userId,commission);
     }
 }

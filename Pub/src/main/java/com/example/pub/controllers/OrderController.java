@@ -39,4 +39,10 @@ public class OrderController {
             return ResponseEntity.status(404).body(exception.getMessage());
         }
     }
+
+    @GetMapping("/summary/user")
+    public ResponseEntity<?> getCommissionsByUser() {
+        return ResponseEntity.status(200).body(orderService.getCommissionsByUser());
+    }
+
 }

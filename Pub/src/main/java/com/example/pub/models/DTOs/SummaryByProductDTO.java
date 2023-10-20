@@ -2,12 +2,12 @@ package com.example.pub.models.DTOs;
 
 import com.example.pub.models.Commission;
 
-public class SummaryByproductDTO {
+public class SummaryByProductDTO {
     private Long userId;
     private Integer amount;
     private Integer price;
 
-    public SummaryByproductDTO(Long id, Commission commission) {
+    public SummaryByProductDTO(Long id, Commission commission) {
         this.userId = id;
         this.amount = commission.getAmount();
         this.price = commission.getPrice();
