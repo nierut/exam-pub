@@ -1,5 +1,6 @@
 package com.example.pub.models;
 
+import com.example.pub.security.SecurityConfiguration;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -13,7 +14,9 @@ public class User {
     private boolean isActive;
     private boolean isAdult;
     private Integer pocket;
-
+    private String password;
+    @Enumerated(EnumType.STRING)
+    private SecurityConfiguration.UserRole role;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Commission> commissions;
 
@@ -67,5 +70,29 @@ public class User {
 
     public void pay(Integer price) {
         this.pocket = pocket - price;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public SecurityConfiguration.UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(SecurityConfiguration.UserRole role) {
+        this.role = role;
+    }
+
+    public List<Commission> getCommissions() {
+        return commissions;
+    }
+
+    public void setCommissions(List<Commission> commissions) {
+        this.commissions = commissions;
     }
 }
