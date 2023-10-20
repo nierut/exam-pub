@@ -1,5 +1,6 @@
 package com.example.pub.services;
 
+import com.example.pub.models.DTOs.SummaryAllDTO;
 import com.example.pub.models.DTOs.PlacedOrder;
 import com.example.pub.models.Drink;
 import com.example.pub.models.Commission;
@@ -7,6 +8,9 @@ import com.example.pub.models.User;
 import com.example.pub.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -47,5 +51,31 @@ public class OrderService {
         Commission commission = new Commission(productName,amount,price,user);
         orderRepository.save(commission);
         return commission;
+    }
+
+    public List<SummaryAllDTO> getSummaryAllDTOs() {
+        List<Commission> commissions = (List<Commission>)(orderRepository.findAll());
+        return convertCommissionsToSummaryAllDTOs(commissions);
+    }
+
+    private List<SummaryAllDTO> convertCommissionsToSummaryAllDTOs(List<Commission> commissions) {
+        List<Drink> drinks = drinkService.getDrinkMenu();
+        List<SummaryAllDTO> summary = new ArrayList<>();
+        for(int i = 0; i < drinks.size();i++) {
+            summary.add(createSummaryAllDTO(drinks.get(i)));
+        }
+        return summary;
+    }
+
+    private SummaryAllDTO createSummaryAllDTO(Drink drink) {
+        List<Commission> commissions = orderRepository.getCommissionsByProductName(drink.getProductName());
+        Integer amountSum = 0;
+        Integer priceSum = 0;
+        for(int i = 0; i < commissions.size();i++) {
+            amountSum += commissions.get(i).getAmount();
+            priceSum += commissions.get(i).getPrice();
+        }
+        SummaryAllDTO summaryForOneDrink = new SummaryAllDTO(drink.getProductName(),amountSum, drink.getPrice(),priceSum);
+        return summaryForOneDrink;
     }
 }

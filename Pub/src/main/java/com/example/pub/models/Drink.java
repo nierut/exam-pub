@@ -14,11 +14,11 @@ public class Drink {
     private Integer price;
     private boolean isForAdult;
 
-    public Long getiD() {
+    public Long getId() {
         return iD;
     }
 
-    public void setiD(Long iD) {
+    public void setId(Long iD) {
         this.iD = iD;
     }
 
