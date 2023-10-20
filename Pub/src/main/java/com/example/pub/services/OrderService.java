@@ -19,6 +19,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserService userService;
     private final DrinkService drinkService;
+
     @Autowired
     public OrderService(OrderRepository orderRepository, UserService userService, DrinkService drinkService) {
         this.orderRepository = orderRepository;
@@ -29,41 +30,40 @@ public class OrderService {
     public Commission placeOrder(PlacedOrder placedOrder) {
         User user = userService.getUserById(placedOrder.getUserId());
         Drink drink = drinkService.getProductById(placedOrder.getProductId());
-        Integer amount = drink.getPrice()/placedOrder.getPrice();
+        Integer amount = drink.getPrice() / placedOrder.getPrice();
         if (isOrderValid(user, drink, placedOrder.getPrice())) {
             userService.payForOrder(user, placedOrder.getPrice());
             return createOrder(drink.getProductName(), amount, placedOrder.getPrice(), user);
-        }
-        else {
+        } else {
             throw new RuntimeException("Order is not valid");
         }
     }
 
     private boolean isOrderValid(User user, Drink drink, Integer price) {
-        if(price > user.getPocket()) {
+        if (price > user.getPocket()) {
             return false;
         }
-        if(drink.isForAdult() == true) {
+        if (drink.isForAdult() == true) {
             return user.isAdult();
         }
         return true;
     }
 
     private Commission createOrder(String productName, Integer amount, Integer price, User user) {
-        Commission commission = new Commission(productName,amount,price,user);
+        Commission commission = new Commission(productName, amount, price, user);
         orderRepository.save(commission);
         return commission;
     }
 
     public List<SummaryAllDTO> getSummaryAllDTOs() {
-        List<Commission> commissions = (List<Commission>)(orderRepository.findAll());
+        List<Commission> commissions = (List<Commission>) (orderRepository.findAll());
         return convertCommissionsToSummaryAllDTOs(commissions);
     }
 
     private List<SummaryAllDTO> convertCommissionsToSummaryAllDTOs(List<Commission> commissions) {
         List<Drink> drinks = drinkService.getDrinkMenu();
         List<SummaryAllDTO> summary = new ArrayList<>();
-        for(int i = 0; i < drinks.size();i++) {
+        for (int i = 0; i < drinks.size(); i++) {
             summary.add(createSummaryAllDTO(drinks.get(i)));
         }
         return summary;
@@ -73,11 +73,11 @@ public class OrderService {
         List<Commission> commissions = orderRepository.getCommissionsByProductName(drink.getProductName());
         Integer amountSum = 0;
         Integer priceSum = 0;
-        for(int i = 0; i < commissions.size();i++) {
+        for (int i = 0; i < commissions.size(); i++) {
             amountSum += commissions.get(i).getAmount();
             priceSum += commissions.get(i).getPrice();
         }
-        SummaryAllDTO summaryForOneDrink = new SummaryAllDTO(drink.getProductName(),amountSum, drink.getPrice(),priceSum);
+        SummaryAllDTO summaryForOneDrink = new SummaryAllDTO(drink.getProductName(), amountSum, drink.getPrice(), priceSum);
         return summaryForOneDrink;
     }
 
@@ -86,7 +86,7 @@ public class OrderService {
         String productName = drinkService.getProductById(productId).getProductName();
         List<Commission> commissions = orderRepository.getCommissionsByProductName(productName);
         List<SummaryByProductDTO> summary = new ArrayList<>();
-        for(int i = 0; i < commissions.size();i++) {
+        for (int i = 0; i < commissions.size(); i++) {
             summary.add(convertCommissionToSummaryByProductDTO(commissions.get(i)));
         }
         return summary;
@@ -98,9 +98,9 @@ public class OrderService {
     }
 
     public List<SummaryByUserDTO> getCommissionsByUser() {
-        List<Commission> commissions = (List<Commission>)(orderRepository.findAll());
+        List<Commission> commissions = (List<Commission>) (orderRepository.findAll());
         List<SummaryByUserDTO> summary = new ArrayList<>();
-        for(int i = 0; i < commissions.size();i++) {
+        for (int i = 0; i < commissions.size(); i++) {
             summary.add(convertCommissionToSummaryByUserDTO(commissions.get(i)));
         }
         return summary;
@@ -108,6 +108,6 @@ public class OrderService {
 
     private SummaryByUserDTO convertCommissionToSummaryByUserDTO(Commission commission) {
         Long userId = commission.getUser().getId();
-        return new SummaryByUserDTO(userId,commission);
+        return new SummaryByUserDTO(userId, commission);
     }
 }

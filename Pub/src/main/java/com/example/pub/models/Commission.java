@@ -14,6 +14,7 @@ public class Commission {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
     public Commission() {
     }
 
@@ -31,7 +32,6 @@ public class Commission {
     public void setId(Long id) {
         this.id = id;
     }
-
 
 
     public String getProductName() {

@@ -14,11 +14,11 @@ public class DrinkController {
 
     @Autowired
     public DrinkController(DrinkService drinkService) {
-        this.drinkService  =drinkService;
+        this.drinkService = drinkService;
     }
 
-   @GetMapping("/")
-   public ResponseEntity<?> getDrinkMenu() {
+    @GetMapping("/")
+    public ResponseEntity<?> getDrinkMenu() {
         return ResponseEntity.status(200).body(drinkService.getDrinkMenu());
-   }
+    }
 }

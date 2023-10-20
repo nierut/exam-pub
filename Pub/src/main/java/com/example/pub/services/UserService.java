@@ -21,13 +21,13 @@ public class UserService {
     }
 
     public List<UserDTO> getUsers() {
-        List<User> users = (List<User>)(userRepository.findAll());
+        List<User> users = (List<User>) (userRepository.findAll());
         return convertUsersToDTOs(users);
     }
 
     public User getUserById(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
-        if(optionalUser.isPresent()) {
+        if (optionalUser.isPresent()) {
             return optionalUser.get();
         } else {
             throw new RuntimeException("User not found");
@@ -36,7 +36,7 @@ public class UserService {
 
     public UserWithCommissionsDTO getUserWithCommissionsDTO(Long id) {
         Optional<User> user = userRepository.findById(id);
-        if(user.isPresent()) {
+        if (user.isPresent()) {
             return convertUserToUserWithCommissionsDTO(user.get());
         } else {
             throw new RuntimeException("User not found");
@@ -49,7 +49,7 @@ public class UserService {
 
     private List<UserDTO> convertUsersToDTOs(List<User> users) {
         List<UserDTO> userDTOS = new ArrayList<>();
-        for(int i = 0; i < users.size();i++) {
+        for (int i = 0; i < users.size(); i++) {
             UserDTO userDTO = new UserDTO(users.get(i));
             userDTOS.add(userDTO);
         }

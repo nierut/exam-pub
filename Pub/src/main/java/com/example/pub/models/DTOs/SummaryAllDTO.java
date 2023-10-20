@@ -7,7 +7,7 @@ public class SummaryAllDTO {
     private Integer priceSum;
 
     public SummaryAllDTO(String productName, Integer amountSum, Integer unitPrice, Integer priceSum) {
-        this.productName  = productName;
+        this.productName = productName;
         this.amountSum = amountSum;
         this.unitPrice = unitPrice;
         this.priceSum = priceSum;

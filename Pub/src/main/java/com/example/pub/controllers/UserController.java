@@ -20,14 +20,14 @@ public class UserController {
 
     @GetMapping("/")
     public ResponseEntity<?> getUsers() {
-            return ResponseEntity.status(200).body(userService.getUsers());
+        return ResponseEntity.status(200).body(userService.getUsers());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id) {
         try {
             return ResponseEntity.status(200).body(userService.getUserWithCommissionsDTO(id));
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             return ResponseEntity.status(404).body(exception.getMessage());
         }
     }
