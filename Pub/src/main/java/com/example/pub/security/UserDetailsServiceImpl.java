@@ -23,10 +23,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Optional<User> optionalUser = userRepository.findByName(username);
         if(optionalUser.isPresent()) {
             User user = optionalUser.get();
+            String[] roles = { "ROLE_" + user.getRole().name() };
             UserDetails userDetails = org.springframework.security.core.userdetails.User
                     .withUsername(username)
                     .password(user.getPassword())
-                    .roles("YOUR_ROLE_HERE")
+                    .roles(roles)
                     .accountLocked(!user.isActive())
                     .build();
 
