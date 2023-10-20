@@ -2,7 +2,7 @@ package com.example.pub.services;
 
 import com.example.pub.models.DTOs.PlacedOrder;
 import com.example.pub.models.Drink;
-import com.example.pub.models.Order;
+import com.example.pub.models.Commission;
 import com.example.pub.models.User;
 import com.example.pub.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +20,13 @@ public class OrderService {
         this.drinkService = drinkService;
     }
 
-    public Order placeOrder(PlacedOrder placedOrder) {
+    public Commission placeOrder(PlacedOrder placedOrder) {
         User user = userService.getUserById(placedOrder.getUserId());
         Drink drink = drinkService.getProductById(placedOrder.getProductId());
         Integer amount = drink.getPrice()/placedOrder.getPrice();
         if (isOrderValid(user, drink, placedOrder.getPrice())) {
             userService.payForOrder(user, placedOrder.getPrice());
-            return createOrder(drink.getProductName(), amount, placedOrder.getPrice(), user.getId());
+            return createOrder(drink.getProductName(), amount, placedOrder.getPrice(), user);
         }
         else {
             throw new RuntimeException("Order is not valid");
@@ -43,9 +43,9 @@ public class OrderService {
         return true;
     }
 
-    private Order createOrder(String productName,Integer amount, Integer price, Long userId) {
-        Order order = new Order(productName,amount,price,userId);
-        orderRepository.save(order);
-        return order;
+    private Commission createOrder(String productName, Integer amount, Integer price, User user) {
+        Commission commission = new Commission(productName,amount,price,user);
+        orderRepository.save(commission);
+        return commission;
     }
 }

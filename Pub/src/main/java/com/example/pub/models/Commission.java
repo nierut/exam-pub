@@ -1,27 +1,27 @@
 package com.example.pub.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
-public class Order {
+public class Commission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String productName;
     private Integer amount;
     private Integer price;
-    private Long userId;
-    public Order() {
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+    public Commission() {
     }
 
-    public Order(String productName,Integer amount, Integer price, Long userId) {
+    public Commission(String productName, Integer amount, Integer price, User user) {
         this.productName = productName;
         this.amount = amount;
         this.price = price;
-        this.userId = userId;
+        this.user = user;
     }
 
     public Long getId() {
@@ -32,13 +32,6 @@ public class Order {
         this.id = id;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 
 
     public String getProductName() {

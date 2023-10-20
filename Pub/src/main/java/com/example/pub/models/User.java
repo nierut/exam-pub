@@ -13,8 +13,9 @@ public class User {
     private boolean isActive;
     private boolean isAdult;
     private Integer pocket;
-    @OneToMany
-    private List<Order> orders;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Commission> commissions;
 
     public Long getId() {
         return id;
@@ -56,12 +57,12 @@ public class User {
         this.pocket = pocket;
     }
 
-    public List<Order> getOrders() {
-        return orders;
+    public List<Commission> getOrders() {
+        return commissions;
     }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
+    public void setOrders(List<Commission> commissions) {
+        this.commissions = commissions;
     }
 
     public void pay(Integer price) {
