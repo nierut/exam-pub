@@ -26,7 +26,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id) {
         try {
-            return ResponseEntity.status(200).body(userService.getUserById(id));
+            return ResponseEntity.status(200).body(userService.getUserWithCommissionsDTO(id));
         } catch(Exception exception) {
             return ResponseEntity.status(404).body(exception.getMessage());
         }

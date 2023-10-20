@@ -1,6 +1,7 @@
 package com.example.pub.services;
 
 import com.example.pub.models.DTOs.UserDTO;
+import com.example.pub.models.DTOs.UserWithCommissionsDTO;
 import com.example.pub.models.User;
 import com.example.pub.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,18 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if(optionalUser.isPresent()) {
+            return optionalUser.get();
+        } else {
+            throw new RuntimeException("User not found");
+        }
+    }
+
+    public UserWithCommissionsDTO getUserWithCommissionsDTO(Long id) {
         Optional<User> user = userRepository.findById(id);
         if(user.isPresent()) {
-            return user.get();
+            return convertUserToUserWithCommissionsDTO(user.get());
         } else {
             throw new RuntimeException("User not found");
         }
@@ -44,5 +54,9 @@ public class UserService {
             userDTOS.add(userDTO);
         }
         return userDTOS;
+    }
+
+    private UserWithCommissionsDTO convertUserToUserWithCommissionsDTO(User user) {
+        return new UserWithCommissionsDTO(user);
     }
 }
